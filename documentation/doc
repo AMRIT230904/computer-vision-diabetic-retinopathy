@@ -1,1 +1,170 @@
+Proper Documentation of Experiments (Dataset and Results Configuration)
+1. Dataset Description
+The experiment uses publicly available retinal fundus image datasets for diabetic retinopathy hemorrhage detection.
+DIARETDB1 Dataset
 
+Public dataset widely used for diabetic retinopathy research.
+Contains 89 retinal fundus images.
+45 images contain hemorrhages or diabetic retinopathy lesions.
+Images captured using fundus cameras with a 50° field of view.
+Used primarily for training the hemorrhage detection model.
+
+DIARETDB0 Dataset
+Contains 130 retinal fundus images.
+110 images contain diabetic retinopathy signs.
+Used as an independent testing dataset to evaluate model generalization.
+
+Dataset Split
+Dataset Split	Percentage
+Training	64%
+Validation	16%
+Testing	20%
+
+The dataset is divided into training, validation, and testing sets to ensure reliable evaluation and avoid overfitting.
+
+2. Experimental Environment
+Hardware Configuration
+Processor: Intel Core i5 (2.4 GHz)
+RAM: 16 GB
+GPU: 6 GB GPu
+
+Software Environment
+
+The implementation was performed using Python and the following libraries:
+TensorFlow / Keras
+OpenCV
+Scikit-learn
+Scikit-image
+NumPy
+Matplotlib
+Seaborn
+These libraries were used for image preprocessing, deep learning training, and evaluation of model performance.
+
+3. Image Preprocessing
+
+Preprocessing improves the visibility of retinal structures and lesions.
+
+Steps Involved
+
+Contrast Enhancement
+Applied CLAHE (Contrast Limited Adaptive Histogram Equalization).
+Adaptive Gamma Correction
+Adjusts brightness based on gradient information.
+Unsharp Masking
+Enhances edges and lesion boundaries.
+Green Channel Extraction
+The green channel of fundus images provides better contrast for detecting retinal lesions.
+These preprocessing steps help improve the detection of hemorrhages and reduce illumination variations.
+
+4. Candidate Region Detection
+
+Potential hemorrhage locations are identified using seed point extraction techniques.
+Detection Process
+Gaussian Matched Filter
+Enhances dark objects such as hemorrhages.
+Otsu Thresholding
+Separates foreground objects from the background.
+Morphological Operations
+Removes noise and small artifacts.
+Connected Component Analysis
+Extracts candidate lesion regions.
+The centroids of these detected regions are used as seed points for hemorrhage detection.
+
+5. Image Segmentation
+
+Segmentation is performed using Smart Window Adaptive Thresholding (SWAT).
+
+SWAT Segmentation Steps
+Extract windows around seed points.
+Apply adaptive thresholding within the window.
+Perform morphological filtering.
+Retain the most significant connected components.
+This method allows detection of hemorrhages with different sizes and intensity variations.
+
+6. Patch Extraction
+
+After segmentation, image patches are extracted to train the deep learning model.
+
+Each patch contains three channels:
+
+Green channel (RGB)
+Value channel (HSV color space)
+Luminance channel (CIE Lab color space)
+These channels provide complementary information for detecting retinal lesions.
+
+Patch Labels
+Label	Meaning
+1	Hemorrhage
+0	Non-Hemorrhage
+
+Balanced samples from both classes are used for training.
+
+7. Deep Learning Models Used
+
+The proposed model is compared with several well-known deep learning architectures.
+
+Proposed Model
+HemNet (Hemorrhage Detection Network)
+
+Comparison Models
+LeNet-5
+AlexNet
+ResNet50
+VGG-16
+Simple CNN
+BiraNet
+EfficientNetB0
+InceptionV3
+HemNet is a shallow convolutional neural network designed to detect hemorrhages efficiently while reducing training time.
+
+8. Training Configuration
+
+The following training parameters were used:
+
+Parameter	Value
+Optimizer	Adam
+Learning Rate	0.001
+Batch Size	16
+Epochs	20
+Loss Function	Categorical Cross-Entropy
+Additional techniques used:
+Early stopping
+Learning rate reduction
+Model checkpointing
+These techniques help improve training stability and prevent overfitting.
+9. Evaluation Metrics
+
+Model performance was evaluated using standard medical classification metrics.
+
+Accuracy
+Accuracy = (TP + TN) / (TP + TN + FP + FN)
+Sensitivity (Recall)
+Sensitivity = TP / (TP + FN)
+Specificity
+Specificity = TN / (TN + FP)
+Precision
+Precision = TP / (TP + FP)
+
+Where:
+
+TP = True Positive
+TN = True Negative
+FP = False Positive
+FN = False Negative
+Confusion matrices were also used to visualize classification performance.
+10. Result Configuration
+After training, the models were evaluated using the test dataset.
+
+The results include:
+Confusion matrix analysis
+Accuracy scores
+Precision and recall values
+ROC curves
+Precision–Recall curves
+The comparison shows that HemNet achieves competitive performance with significantly reduced training time compared to deeper models.
+11. Key Observations
+
+Image preprocessing significantly improves lesion detection accuracy.
+Seed point extraction reduces unnecessary search regions and speeds up detection.
+HemNet achieves competitive accuracy with fewer layers.
+Increasing network depth does not always improve performance but increases computational cost.
